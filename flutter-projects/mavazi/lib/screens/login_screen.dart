@@ -86,8 +86,13 @@ class _LoginScreenState extends State<LoginScreen> {
                   }
                 ),
 
-                                SizedBox(height: 24),
-                ElevatedButton(onPressed: (){}, 
+                SizedBox(height: 24),
+                ElevatedButton(onPressed: (){
+                  if (loginScreenFormKey.currentState!.validate ()){
+                    //perfom login
+                    // nacigate to home screen
+                  }
+                }, 
                 child: Text("Login", style: TextStyle(color: Colors.white),),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.lightBlue,
