@@ -7,24 +7,31 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-
-import 'package:mavazi/main.dart';
+// Imports your actual login screen directly from your lib folder
+import 'package:mavazi/screens/login_screen.dart';
 
 void main() {
-  testWidgets('Counter increments smoke test', (WidgetTester tester) async {
-    // Build our app and trigger a frame.
-    await tester.pumpWidget(const MyApp());
+  testWidgets('Login screen input and submission smoke test', (WidgetTester tester) async {
+    // Build our login screen inside a MaterialApp container
+    await tester.pumpWidget(const MaterialApp(home: LoginScreen()));
 
-    // Verify that our counter starts at 0.
-    expect(find.text('0'), findsOneWidget);
-    expect(find.text('1'), findsNothing);
+    // Locate the email field, password field, and login button.
+    final emailField = find.byType(TextField).first;
+    final passwordField = find.byType(TextField).last;
+    final loginButton = find.widgetWithText(ElevatedButton, 'Login');
 
-    // Tap the '+' icon and trigger a frame.
-    await tester.tap(find.byIcon(Icons.add));
+    // Verify that the login form elements are present on screen.
+    expect(emailField, findsOneWidget);
+    expect(passwordField, findsOneWidget);
+    expect(loginButton, findsOneWidget);
+
+    // Enter test values into the input fields.
+    await tester.enterText(emailField, 'user@example.com');
+    await tester.enterText(passwordField, 'password123');
     await tester.pump();
 
-    // Verify that our counter has incremented.
-    expect(find.text('0'), findsNothing);
-    expect(find.text('1'), findsOneWidget);
+    // Tap the Login button and wait for any transitions to settle.
+    await tester.tap(loginButton);
+    await tester.pumpAndSettle();
   });
 }

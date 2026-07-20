@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'signup_screen.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -10,105 +11,143 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  final loginScreenFormKey = GlobalKey<FormState>();
-  final emailController = TextEditingController();
-  final passwordController = TextEditingController();
-  bool hidePassword = true;
+  final _loginFormKey = GlobalKey<FormState>();
+  final _emailController = TextEditingController();
+  final _passwordController = TextEditingController();
+  bool _hidePassword = true;true
 
   @override
   Widget build(BuildContext context) {
+
+    @override
+    void dispose(){
+      _emailController.dispose();
+      _passwordController.dispose();
+      super.dispose();
+    }
     return Scaffold(
       body: SafeArea(
         child: SingleChildScrollView(
-          padding:EdgeInsets.all(24),
           child: Form(
-            key: loginScreenFormKey,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                Image.asset(
-                  'assets/images/logo.png',
-                  width: 100,
-                  height: 100,
-                  fit: BoxFit.contain,
-                ),
-                const SizedBox(height: 16),
-                const Text(
-                  "Login",
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                  textAlign: TextAlign.center,
-                ),
-                const SizedBox(height: 16),
-                TextFormField(
-                  controller: emailController,
-                  keyboardType: TextInputType.emailAddress,
-                  decoration: const InputDecoration(
-                    prefixIcon: Icon(Icons.email_outlined),
-                    labelText: 'Email',
-                    border: OutlineInputBorder(),
+            key: _loginFormKey,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 24.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  const SizedBox(height: 40), 
+                  Image.asset(
+                    'assets/images/logo.png',
+                    width: 160,
+                    height: 160,
+                    fit: BoxFit.contain,
                   ),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please enter email';
-                    }
-                    if (!value.contains('@')) {
-                      return 'Please enter a valid email address';
-                    }
-                    return null;
-                  },
-                ),
-                SizedBox(height: 24,),
-                TextFormField(
-                  controller: passwordController,
-                  decoration: InputDecoration(
-                    prefixIcon: const Icon(Icons.lock_outline),
-                    border: const OutlineInputBorder(),
-                    labelText: 'Password',
-                    suffixIcon: IconButton(
-                     onPressed: () {
-                      setState(() {
-                        hidePassword = !hidePassword;
-                      });
-                     },
-                     icon: Icon(
-                      hidePassword 
-                      ? Icons.visibility_outlined
-                      : Icons.visibility_off_outlined,
-                     ),
+                  const SizedBox(height: 20),
+                  const Text(
+                    "Login",
+                    style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                    textAlign: TextAlign.center,
+                  ),
+                  const SizedBox(height: 25),
+                  TextFormField(
+                    controller: _emailController,
+                    keyboardType: TextInputType.emailAddress,
+                    decoration: const InputDecoration(
+                      prefixIcon: Icon(Icons.email_outlined),
+                      labelText: 'Email',
+                      border: OutlineInputBorder(),
+                      isDense: true, 
+                      contentPadding: EdgeInsets.symmetric(
+                        vertical: 14,
+                        horizontal: 16,
+                      ),
                     ),
-                  ),
-                  obscureText: hidePassword,
-                  validator: (value){
-                      if (value == null || value.isEmpty){
-                        return 'Enter your Password';
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter your email';
+                      }
+                      if (!value.contains('@')) {
+                        return 'Please enter a valid email';
                       }
                       return null;
-                  }
-                ),
-
-                SizedBox(height: 24),
-                ElevatedButton(onPressed: (){
-                  if (loginScreenFormKey.currentState!.validate ()){
-                    //perfom login
-                    // nacigate to home screen
-                  }
-                }, 
-                child: Text("Login", style: TextStyle(color: Colors.white),),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.lightBlue,
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8),
+                    },
                   ),
-                  ),
-                ),
 
-                SizedBox(height: 16),
-                Row(children: [
-                  Text("Don't have an account ?"),
-                  TextButton(onPressed: () {}, child: Text("Sign Up"))
+                  const SizedBox(height: 20),
+                  TextFormField(
+                    controller: _passwordController,
+                    obscureText: _hidePassword,
+                    decoration: InputDecoration(
+                      prefixIcon: const Icon(Icons.lock_outline),
+                      labelText: 'Password',
+                      border: const OutlineInputBorder(),
+                      isDense: true, 
+                      contentPadding: const EdgeInsets.symmetric(
+                        vertical: 14,
+                        horizontal: 16,
+                      ),
+                      suffixIcon: IconButton(
+                        icon: Icon(
+                          _hidePassword
+                              ? Icons.visibility_off
+                              : Icons.visibility,
+                        ),
+                        onPressed: () {
+                          setState(() {
+                            _hidePassword = !_hidePassword;
+                          });
+                        },
+                      ),
+                    ),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter your password';
+                      }
+                      if (value.length < 6) {
+                        return 'Password must be at least 6 characters long';
+                      }
+                      return null;
+                    },
+                  ),
+
+                  const SizedBox(height: 24), 
+                  ElevatedButton(
+                    onPressed: () {
+                      if (_loginFormKey.currentState!.validate()) {
+                        // Perform login action
+                        //Navigate to home screen 
+                      }
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.blue, 
+                      padding: const EdgeInsets.symmetric(vertical: 14),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                    ),
+                    child: const Text("Login", style: TextStyle(color: Colors.white)),  
+                  ),
+
+                  const SizedBox(height: 16), 
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Text("Don't have an account?"),
+                      TextButton(
+                        onPressed: () {
+                          Navigator.push(context,
+                           MaterialPageRoute(
+                            builder: (context) => const SignupScreen(),
+                          ),
+                          );
+                          // Navigate to signup screen
+                        },
+                        child: const Text("Sign Up"),
+                      ),
+                    ],
+                  ),
                 ],
-                mainAxisAlignment: MainAxisAlignment.center,) // Fixed the issue here
-
-              ],
+              ),
             ),
           ),
         ),
